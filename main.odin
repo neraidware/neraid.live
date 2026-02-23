@@ -18,11 +18,6 @@ main :: proc() {
     data := Data{
         social = {
             {
-                title = "join our community!!",
-                icon_url = "res/icons/discord.png",
-                url = "https://discord.gg/Et4Fe4Kc",
-            },
-            {
                 title = "my projects on github",
                 icon_url = "res/icons/github.png",
                 url = "https://github.com/neraid-live/",
