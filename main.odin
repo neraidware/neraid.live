@@ -18,9 +18,9 @@ main :: proc() {
     data := Data{
         social = {
             {
-                title = "my projects on github",
+                title = "my projects on codeberg",
                 icon_url = "res/icons/github.png",
-                url = "https://github.com/neraid-live/",
+                url = "https://codeberg.org/neraid",
             },
             {
                 title = "streaming on twitch",
