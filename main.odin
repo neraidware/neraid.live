@@ -33,7 +33,7 @@ main :: proc() {
                 url = "https://youtube.com/@neraid",
             },
             {
-                title = "practice charity :)",
+                title = "buy me some time",
                 icon_url = "res/icons/patreon.png",
                 url = "https://patreon.com/neraid_live",
             },
@@ -44,12 +44,12 @@ main :: proc() {
                 middle_finger = true,
             },
             {
-                title = "a peek into my life",
+                title = "i don't post here but follow me",
                 icon_url = "res/icons/instagram.png",
                 url = "https://instagram.com/neraid.live",
             },
             {
-                title = "short attention span tok",
+                title = "i don't post here either",
                 icon_url = "res/icons/tiktok.png",
                 url = "https://tiktok.com/@neraid.live",
             },
