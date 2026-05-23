@@ -10,7 +10,6 @@ Data :: struct {
         title: string,
         icon_url: string,
         url: string,
-        middle_finger: bool,
     }
 }
 
@@ -18,38 +17,27 @@ main :: proc() {
     data := Data{
         social = {
             {
-                title = "my projects on codeberg",
+                title = "meus projetos open source",
                 icon_url = "res/icons/github.png",
                 url = "https://codeberg.org/neraid",
             },
             {
-                title = "streaming on twitch",
+                title = "lives na twitch",
                 icon_url = "res/icons/twitch.png",
                 url = "https://twitch.tv/neraid_live",
             },
             {
-                title = "i post on youtube!!",
+                title = "meu canal no youtube",
                 icon_url = "res/icons/youtube.png",
                 url = "https://youtube.com/@neraid",
             },
             {
-                title = "buy me some time",
-                icon_url = "res/icons/patreon.png",
-                url = "https://patreon.com/neraid_live",
-            },
-            {
-                title = "toXic",
-                icon_url = "res/icons/x.png",
-                url = "https://x.com/neraid_live",
-                middle_finger = true,
-            },
-            {
-                title = "i don't post here but follow me",
+                title = "o instagram",
                 icon_url = "res/icons/instagram.png",
                 url = "https://instagram.com/neraid.live",
             },
             {
-                title = "i don't post here either",
+                title = "meu tuktuk",
                 icon_url = "res/icons/tiktok.png",
                 url = "https://tiktok.com/@neraid.live",
             },
