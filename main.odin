@@ -17,29 +17,44 @@ main :: proc() {
     data := Data{
         social = {
             {
-                title = "meus projetos open source",
-                icon_url = "res/icons/github.png",
-                url = "https://codeberg.org/neraid",
-            },
-            {
-                title = "lives na twitch",
-                icon_url = "res/icons/twitch.png",
-                url = "https://twitch.tv/neraid_live",
-            },
-            {
-                title = "meu canal no youtube",
+                title = "YouTube",
                 icon_url = "res/icons/youtube.png",
                 url = "https://youtube.com/@neraid",
             },
             {
-                title = "o instagram",
+                title = "YouTube (VODS)",
+                icon_url = "res/icons/youtube.png",
+                url = "https://youtube.com/@neraid_live",
+            },
+            {
+                title = "Twitch",
+                icon_url = "res/icons/twitch.png",
+                url = "https://twitch.tv/neraid_live",
+            },
+            {
+                title = "Codeberg",
+                icon_url = "res/icons/github.png",
+                url = "https://codeberg.org/neraid",
+            },
+            {
+                title = "Instagram",
                 icon_url = "res/icons/instagram.png",
                 url = "https://instagram.com/neraid.live",
             },
             {
-                title = "meu tuktuk",
+                title = "TikTok",
                 icon_url = "res/icons/tiktok.png",
                 url = "https://tiktok.com/@neraid.live",
+            },
+            {
+                title = "Twitter",
+                icon_url = "res/icons/x.png",
+                url = "https://x.com/neraid_live",
+            },
+            {
+                title = "Threads",
+                icon_url = "res/icons/instagram.png",
+                url = "https://www.threads.com/@neraid.live",
             },
         }
     }
