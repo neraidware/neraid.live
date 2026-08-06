@@ -16,42 +16,47 @@ main :: proc() {
     data := Data{
         social = {
             {
-                title = "YouTube",
+                title = "@neraid",
                 icon_url = "res/icons/youtube.png",
                 url = "https://youtube.com/@neraid",
             },
             {
-                title = "YouTube (VODS)",
+                title = "@neraidware",
                 icon_url = "res/icons/youtube.png",
-                url = "https://youtube.com/@neraid_live",
+                url = "https://youtube.com/@neraidware",
             },
             {
-                title = "Twitch",
+                title = "neraid_live",
                 icon_url = "res/icons/twitch.png",
                 url = "https://twitch.tv/neraid_live",
             },
             {
-                title = "Codeberg",
+                title = "@neraidware",
+                icon_url = "res/icons/github.png",
+                url = "https://github.com/neraidware",
+            },
+            {
+                title = "@neraid",
                 icon_url = "res/icons/github.png",
                 url = "https://codeberg.org/neraid",
             },
             {
-                title = "Instagram",
+                title = "@neraid.live",
                 icon_url = "res/icons/instagram.png",
                 url = "https://instagram.com/neraid.live",
             },
             {
-                title = "TikTok",
+                title = "@neraid.live",
                 icon_url = "res/icons/tiktok.png",
                 url = "https://tiktok.com/@neraid.live",
             },
             {
-                title = "Twitter",
+                title = "@neraid_live",
                 icon_url = "res/icons/x.png",
                 url = "https://x.com/neraid_live",
             },
             {
-                title = "Threads",
+                title = "@neraid.live",
                 icon_url = "res/icons/instagram.png",
                 url = "https://www.threads.com/@neraid.live",
             },
