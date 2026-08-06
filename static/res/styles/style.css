@@ -369,6 +369,7 @@ main.article {
     margin: 0.75rem 0;
     font-family: monospace;
     font-size: 0.85rem;
+    white-space: pre;
 }
 
 .article-content code {

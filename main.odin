@@ -226,13 +226,13 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
         if strings.has_prefix(trimmed, "@code") {
             close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
-            strings.write_string(&b, "<pre><code>")
+            strings.write_string(&b, "<pre><code>\n")
             in_code = true
             continue
         }
 
         if trimmed == "@end" {
-            strings.write_string(&b, "</code></pre>")
+            strings.write_string(&b, "</code></pre>\n")
             in_code = false
             continue
         }
@@ -250,7 +250,7 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
         if is_hr(trimmed) {
             close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
-            strings.write_string(&b, "<hr>")
+            strings.write_string(&b, "<hr>\n")
             continue
         }
 
@@ -266,31 +266,31 @@ render_norg :: proc(content: string) -> (html, title: string) {
             }
             fmt.sbprintf(&b, "<h%d>", level)
             render_inline(&b, inner)
-            fmt.sbprintf(&b, "</h%d>", level)
+            fmt.sbprintf(&b, "</h%d>\n", level)
             continue
         }
 
         if strings.has_prefix(trimmed, "- ") {
             if !in_ul {
                 close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
-                strings.write_string(&b, "<ul>")
+                strings.write_string(&b, "<ul>\n")
                 in_ul = true
             }
             strings.write_string(&b, "<li>")
             render_inline(&b, trimmed[2:])
-            strings.write_string(&b, "</li>")
+            strings.write_string(&b, "</li>\n")
             continue
         }
 
         if strings.has_prefix(trimmed, "~ ") {
             if !in_ol {
                 close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
-                strings.write_string(&b, "<ol>")
+                strings.write_string(&b, "<ol>\n")
                 in_ol = true
             }
             strings.write_string(&b, "<li>")
             render_inline(&b, trimmed[2:])
-            strings.write_string(&b, "</li>")
+            strings.write_string(&b, "</li>\n")
             continue
         }
 
@@ -299,7 +299,7 @@ render_norg :: proc(content: string) -> (html, title: string) {
             in_p = true
         }
         render_inline(&b, trimmed)
-        strings.write_byte(&b, ' ')
+        strings.write_byte(&b, '\n')
     }
 
     close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
@@ -308,19 +308,19 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
 close_blocks :: proc(b: ^strings.Builder, in_code, in_ul, in_ol, in_p: ^bool) {
     if in_code^ {
-        strings.write_string(b, "</code></pre>")
+        strings.write_string(b, "</code></pre>\n")
         in_code^ = false
     }
     if in_ul^ {
-        strings.write_string(b, "</ul>")
+        strings.write_string(b, "</ul>\n")
         in_ul^ = false
     }
     if in_ol^ {
-        strings.write_string(b, "</ol>")
+        strings.write_string(b, "</ol>\n")
         in_ol^ = false
     }
     if in_p^ {
-        strings.write_string(b, "</p>")
+        strings.write_string(b, "</p>\n")
         in_p^ = false
     }
 }
