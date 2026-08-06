@@ -1,6 +1,5 @@
 package main
 
-import "core:fmt"
 import "core:log"
 import "core:os"
 import mustache "./vendor/odin-mustache"
@@ -65,12 +64,13 @@ main :: proc() {
 
     if err != nil {
         log.error(err)
-        return
+        os.exit(1)
     }
 
     write_err := os.write_entire_file("deploy/index.html", transmute([]u8)s)
 
     if write_err != nil {
-        fmt.println(err)
+        log.error(write_err)
+        os.exit(1)
     }
 }
