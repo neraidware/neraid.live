@@ -54,7 +54,7 @@ jobs:
                   await new Promise((res) => setTimeout(res, attempt * 10000));
                 }
               }
-              await new Promise((res) => setTimeout(res, 400));
+              await new Promise((res) => setTimeout(res, 100));
             }
 
             core.notice(`done: deleted ${ok}/${doomed.length}`);
