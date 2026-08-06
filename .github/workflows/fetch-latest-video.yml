@@ -1,6 +1,9 @@
 name: Fetch Latest Video
 
 on:
+  push:
+    branches:
+      - gh-pages
   workflow_dispatch:
   schedule:
     - cron: 0 */12 * * *
@@ -14,7 +17,6 @@ concurrency:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    environment: youtube-api
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,10 +26,11 @@ jobs:
       - name: Fetch latest video ID
         run: |
           cd site
-          curl -fsS "https://www.googleapis.com/youtube/v3/playlistItems?playlistId=UU4U1e34boXZ7cjYjqzf9osw&part=contentDetails&maxResults=1&sort=date&key=${{ secrets.YOUTUBE_API_KEY }}" \
-            | jq -r '.items[0].contentDetails.videoId' > LATEST_VIDEO_ID
-          if ! grep -qE '^[A-Za-z0-9_-]{11}$' LATEST_VIDEO_ID; then
-            echo "No valid video ID received; leaving LATEST_VIDEO_ID unchanged."
+          id=$(curl -fsSL --retry 3 --max-time 20 "https://www.youtube.com/feeds/videos.xml?channel_id=UC4U1e34boXZ7cjYjqzf9osw" | grep -oE '<yt:videoId>[^<]+' | head -1 | cut -d'>' -f2)
+          if [ -n "$id" ] && echo "$id" | grep -qE '^[A-Za-z0-9_-]{11}$'; then
+            echo "$id" > LATEST_VIDEO_ID
+          else
+            echo "No video ID received; leaving LATEST_VIDEO_ID unchanged."
             exit 0
           fi
 
@@ -37,7 +40,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add LATEST_VIDEO_ID
-          if ! git diff --quiet && ! git diff --staged --quiet; then
+          if ! git diff --staged --quiet; then
             git commit -m "Update latest video ID: $(cat LATEST_VIDEO_ID)"
             git push origin HEAD:gh-pages
           else
