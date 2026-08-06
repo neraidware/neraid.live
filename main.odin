@@ -133,7 +133,7 @@ generate_blog :: proc() {
             title = slug
         }
 
-        out_dir := fmt.tprintf("deploy/articles/%s/%s", date, slug)
+        out_dir := fmt.tprintf("deploy/blog/%s/%s", date, slug)
         os.make_directory_all(out_dir)
 
         body, rerr := mustache.render_from_filename("templates/article.html", ArticlePage_Data{title = title, content = html})
@@ -149,7 +149,7 @@ generate_blog :: proc() {
         append(&articles, Article{
             date = date,
             slug = slug,
-            url = fmt.tprintf("/articles/%s/%s/", date, slug),
+            url = fmt.tprintf("/blog/%s/%s/", date, slug),
             title = title,
         })
     }
@@ -211,9 +211,14 @@ parse_article_path :: proc(path: string) -> (date, slug: string) {
 //         {url}[text] and [text]{url} links, \ escapes
 // ------------------------------------------------------------------
 
+INDENT := "            "
+LI_INDENT := "                "
+
 render_norg :: proc(content: string) -> (html, title: string) {
     b := strings.builder_make()
+    pb := strings.builder_make()
     defer strings.builder_destroy(&b)
+    defer strings.builder_destroy(&pb)
 
     in_code, in_ul, in_ol, in_p := false, false, false, false
     first_h1 := true
@@ -225,8 +230,9 @@ render_norg :: proc(content: string) -> (html, title: string) {
         trimmed := strings.trim_space(line)
 
         if strings.has_prefix(trimmed, "@code") {
-            close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
-            strings.write_string(&b, "<pre><code>\n")
+            close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
+            strings.write_string(&b, INDENT)
+            strings.write_string(&b, "<pre><code>")
             in_code = true
             continue
         }
@@ -244,18 +250,19 @@ render_norg :: proc(content: string) -> (html, title: string) {
         }
 
         if len(trimmed) == 0 {
-            close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
+            close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
             continue
         }
 
         if is_hr(trimmed) {
-            close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
+            close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
+            strings.write_string(&b, INDENT)
             strings.write_string(&b, "<hr>\n")
             continue
         }
 
         if level, ok := heading_level(trimmed); ok {
-            close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
+            close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
             inner := strings.trim_left(trimmed[level:], " ")
             if level == 1 && first_h1 {
                 title = inner
@@ -264,6 +271,7 @@ render_norg :: proc(content: string) -> (html, title: string) {
             if level > 6 {
                 level = 6
             }
+            strings.write_string(&b, INDENT)
             fmt.sbprintf(&b, "<h%d>", level)
             render_inline(&b, inner)
             fmt.sbprintf(&b, "</h%d>\n", level)
@@ -272,10 +280,12 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
         if strings.has_prefix(trimmed, "- ") {
             if !in_ul {
-                close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
+                close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
+                strings.write_string(&b, INDENT)
                 strings.write_string(&b, "<ul>\n")
                 in_ul = true
             }
+            strings.write_string(&b, LI_INDENT)
             strings.write_string(&b, "<li>")
             render_inline(&b, trimmed[2:])
             strings.write_string(&b, "</li>\n")
@@ -284,10 +294,12 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
         if strings.has_prefix(trimmed, "~ ") {
             if !in_ol {
-                close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
+                close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
+                strings.write_string(&b, INDENT)
                 strings.write_string(&b, "<ol>\n")
                 in_ol = true
             }
+            strings.write_string(&b, LI_INDENT)
             strings.write_string(&b, "<li>")
             render_inline(&b, trimmed[2:])
             strings.write_string(&b, "</li>\n")
@@ -295,32 +307,39 @@ render_norg :: proc(content: string) -> (html, title: string) {
         }
 
         if !in_p {
-            strings.write_string(&b, "<p>")
             in_p = true
         }
-        render_inline(&b, trimmed)
-        strings.write_byte(&b, '\n')
+        if len(pb.buf) > 0 {
+            strings.write_byte(&pb, ' ')
+        }
+        render_inline(&pb, trimmed)
     }
 
-    close_blocks(&b, &in_code, &in_ul, &in_ol, &in_p)
+    close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
     return strings.clone(strings.to_string(b)), title
 }
 
-close_blocks :: proc(b: ^strings.Builder, in_code, in_ul, in_ol, in_p: ^bool) {
+close_blocks :: proc(b, pb: ^strings.Builder, in_code, in_ul, in_ol, in_p: ^bool) {
     if in_code^ {
         strings.write_string(b, "</code></pre>\n")
         in_code^ = false
     }
     if in_ul^ {
+        strings.write_string(b, INDENT)
         strings.write_string(b, "</ul>\n")
         in_ul^ = false
     }
     if in_ol^ {
+        strings.write_string(b, INDENT)
         strings.write_string(b, "</ol>\n")
         in_ol^ = false
     }
     if in_p^ {
+        strings.write_string(b, INDENT)
+        strings.write_string(b, "<p>")
+        strings.write_string(b, strings.to_string(pb^))
         strings.write_string(b, "</p>\n")
+        strings.builder_reset(pb)
         in_p^ = false
     }
 }
