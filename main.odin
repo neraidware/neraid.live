@@ -55,11 +55,6 @@ main :: proc() {
                 icon_url = "res/icons/x.png",
                 url = "https://x.com/neraid_live",
             },
-            {
-                title = "@neraid.live",
-                icon_url = "res/icons/instagram.png",
-                url = "https://www.threads.com/@neraid.live",
-            },
         }
     }
 
