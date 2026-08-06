@@ -10,7 +10,7 @@ setTwitchLiveStatus(false);
 
 const twitch_player = new Twitch.Player("twitch_embed", {
     channel: "neraid_live",
-    parent: ["neraid.live", "localhost"],
+    parent: ["neraid.live", "localhost", "127.0.0.1"],
     autoplay: false,
     muted: true,
     width: 560,

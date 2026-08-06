@@ -91,6 +91,13 @@ main :: proc() {
     os.copy_directory_all("deploy/", "static/")
     _ = os.remove_all("deploy/blog")
 
+    if os.exists("LATEST_VIDEO_ID") {
+        if cerr := os.copy_file("deploy/LATEST_VIDEO_ID", "LATEST_VIDEO_ID"); cerr != nil {
+            log.error(cerr)
+            os.exit(1)
+        }
+    }
+
     s, err := mustache.render_from_filename("templates/index.html", data)
 
     if err != nil {
