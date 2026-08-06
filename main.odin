@@ -26,6 +26,8 @@ Article :: struct {
     slug: string,
     url: string,
     title: string,
+    is_micro: bool,
+    content: string,
 }
 
 Blog_Data :: struct {
@@ -87,7 +89,7 @@ main :: proc() {
     }
 
     os.copy_directory_all("deploy/", "static/")
-    _ = os.remove_all("deploy/articles")
+    _ = os.remove_all("deploy/blog")
 
     s, err := mustache.render_from_filename("templates/index.html", data)
 
@@ -113,7 +115,7 @@ main :: proc() {
 generate_blog :: proc() {
     files := make([dynamic]string)
     defer delete(files)
-    find_norg_files("static/articles", &files)
+    find_norg_files("static/blog", &files)
 
     articles := make([dynamic]Article)
     defer delete(articles)
@@ -125,12 +127,23 @@ generate_blog :: proc() {
         }
 
         html, title := render_norg(string(data))
-        date, slug := parse_article_path(f)
+        date, slug, kind := parse_blog_path(f)
         if slug == "" {
             continue
         }
         if title == "" {
             title = slug
+        }
+
+        if kind == "micro.norg" {
+            append(&articles, Article{
+                date = date,
+                slug = slug,
+                title = title,
+                is_micro = true,
+                content = html,
+            })
+            continue
         }
 
         out_dir := fmt.tprintf("deploy/blog/%s/%s", date, slug)
@@ -189,17 +202,18 @@ find_norg_files :: proc(dir: string, acc: ^[dynamic]string) {
     }
 }
 
-parse_article_path :: proc(path: string) -> (date, slug: string) {
+parse_blog_path :: proc(path: string) -> (date, slug, kind: string) {
     parts := strings.split(path, "/")
     defer delete(parts)
 
     n := len(parts)
-    if n < 6 {
-        return "", ""
+    if n < 7 {
+        return "", "", ""
     }
 
-    date = fmt.tprintf("%s/%s/%s", parts[n - 4], parts[n - 3], parts[n - 2])
-    slug = strings.trim_suffix(parts[n - 1], ".norg")
+    date = fmt.tprintf("%s/%s/%s", parts[n - 5], parts[n - 4], parts[n - 3])
+    slug = parts[n - 2]
+    kind = parts[n - 1]
     return
 }
 
@@ -221,6 +235,7 @@ render_norg :: proc(content: string) -> (html, title: string) {
     defer strings.builder_destroy(&pb)
 
     in_code, in_ul, in_ol, in_p := false, false, false, false
+    in_meta := false
     first_h1 := true
 
     lines := strings.split_lines(content, context.allocator)
@@ -228,6 +243,26 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
     for line in lines {
         trimmed := strings.trim_space(line)
+
+        if trimmed == "@document.meta" {
+            close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
+            in_meta = true
+            continue
+        }
+
+        if in_meta {
+            if trimmed == "@end" {
+                in_meta = false
+                continue
+            }
+            if idx := strings.index_byte(trimmed, ':'); idx != -1 {
+                key := strings.trim_space(trimmed[:idx])
+                if key == "title" && title == "" {
+                    title = strings.trim_space(trimmed[idx + 1:])
+                }
+            }
+            continue
+        }
 
         if strings.has_prefix(trimmed, "@code") {
             close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
@@ -265,8 +300,11 @@ render_norg :: proc(content: string) -> (html, title: string) {
             close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
             inner := strings.trim_left(trimmed[level:], " ")
             if level == 1 && first_h1 {
-                title = inner
                 first_h1 = false
+                if title == "" {
+                    title = inner
+                }
+                continue
             }
             if level > 6 {
                 level = 6

@@ -294,6 +294,30 @@ main.blog {
     color: #9d00ff;
 }
 
+.micro-post {
+    background-color: #161616;
+    border: 1px solid #242424;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.micro-post:hover {
+    border-color: green;
+}
+
+.micro-post .blog-date {
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.micro-content p {
+    margin: 0.25rem 0;
+}
+
 /* article */
 
 main.article {
