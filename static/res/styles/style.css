@@ -121,6 +121,27 @@ main {
 .hottest-text > *:nth-child(8) { --index: 8; }
 .hottest-text > *:nth-child(9) { --index: 9; }
 
+.live-text {
+    display: inline-flex;
+    margin: 0;
+}
+
+.live-text > span {
+    margin: 0;
+    animation: text-float 1s infinite ease-in-out alternate;
+    animation-delay: calc(var(--index) * 0.1s);
+    transform: translateY(-10px);
+    text-shadow: 0 0 4px #b026ff;
+    background: linear-gradient(90deg, #9d00ff, #d9b3ff);
+    background-clip: text;
+    color: transparent;
+}
+
+.live-text > span:nth-child(1) { --index: 1; }
+.live-text > span:nth-child(2) { --index: 2; }
+.live-text > span:nth-child(3) { --index: 3; }
+.live-text > span:nth-child(4) { --index: 4; }
+
 @keyframes text-float {
 0% {
     transform: translateY(-10px);
@@ -189,6 +210,19 @@ aside * {
     max-width: 20rem;
     aspect-ratio: 16/9;
     border-radius: 15px;
+}
+
+#twitch_embed {
+    width: 100%;
+    max-width: 20rem;
+    aspect-ratio: 16/9;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#twitch_embed iframe {
+    width: 100%;
+    height: 100%;
 }
 
 @media only screen and (max-width: 640px) {

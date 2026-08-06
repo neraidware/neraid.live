@@ -42,7 +42,7 @@ main :: proc() {
             },
             {
                 title = "@neraid",
-                icon_url = "res/icons/github.png",
+                icon_url = "res/icons/codeberg.png",
                 url = "https://codeberg.org/neraid",
                 hand = "res/icons/pointing_hand.png",
             },
