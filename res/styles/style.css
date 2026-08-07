@@ -5,10 +5,6 @@
     font-style: normal;
 }
 
-title {
-    display: none;
-}
-
 * {
     all: unset;
     transition: 100ms;
@@ -37,6 +33,29 @@ body {
     align-items: center;
     width: 100%;
     min-height: 100vh;
+    padding-top: 3.5rem;
+}
+
+#topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+    background: transparent;
+    z-index: 10;
+}
+
+#topbar a {
+    color: lightyellow;
+}
+
+#topbar a:hover {
+    color: #9d00ff;
+    cursor: pointer;
 }
 
 main {
@@ -121,6 +140,27 @@ main {
 .hottest-text > *:nth-child(8) { --index: 8; }
 .hottest-text > *:nth-child(9) { --index: 9; }
 
+.live-text {
+    display: inline-flex;
+    margin: 0;
+}
+
+.live-text > span {
+    margin: 0;
+    animation: text-float 1s infinite ease-in-out alternate;
+    animation-delay: calc(var(--index) * 0.1s);
+    transform: translateY(-10px);
+    text-shadow: 0 0 4px #b026ff;
+    background: linear-gradient(90deg, #9d00ff, #d9b3ff);
+    background-clip: text;
+    color: transparent;
+}
+
+.live-text > span:nth-child(1) { --index: 1; }
+.live-text > span:nth-child(2) { --index: 2; }
+.live-text > span:nth-child(3) { --index: 3; }
+.live-text > span:nth-child(4) { --index: 4; }
+
 @keyframes text-float {
 0% {
     transform: translateY(-10px);
@@ -155,24 +195,6 @@ main {
     flex: 1;
 }
 
-#welcome {
-    display: flex;
-    flex-direction: column;
-}
-
-#profile-image {
-    max-height: 15rem;
-    max-width: 15rem;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-#profile-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
 aside {
     display: flex;
     justify-content: center;
@@ -189,6 +211,19 @@ aside * {
     max-width: 20rem;
     aspect-ratio: 16/9;
     border-radius: 15px;
+}
+
+#twitch_embed {
+    width: 100%;
+    max-width: 20rem;
+    aspect-ratio: 16/9;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#twitch_embed iframe {
+    width: 100%;
+    height: 100%;
 }
 
 @media only screen and (max-width: 640px) {
@@ -211,4 +246,184 @@ aside * {
 
 #interactive-gif:has(:hover) .unhovered {
     display: none;
+}
+
+/* blog */
+
+main.blog {
+    gap: 1rem;
+}
+
+.blog-title {
+    font-size: 1.5rem;
+    color: #9d00ff;
+}
+
+.blog-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 40rem;
+    padding: 0 1rem;
+}
+
+.blog-list a {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.5rem;
+    background-color: #161616;
+    border: 1px solid #161616;
+    width: 100%;
+}
+
+.blog-list a:hover {
+    border-color: green;
+    cursor: pointer;
+}
+
+.blog-date {
+    color: #9d00ff;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.blog-entry-title:hover {
+    color: #9d00ff;
+}
+
+.micro-post {
+    background-color: #161616;
+    border: 1px solid #242424;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.micro-post:hover {
+    border-color: green;
+}
+
+.micro-post .blog-date {
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.micro-content p {
+    margin: 0.25rem 0;
+}
+
+/* article */
+
+main.article {
+    width: 100%;
+    padding: 1rem;
+}
+
+.article-content {
+    max-width: 40rem;
+    width: 100%;
+    text-align: left;
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5 {
+    margin: 1.25rem 0 0.5rem;
+    color: #9d00ff;
+}
+
+.article-content h1 {
+    font-size: 1.6rem;
+}
+
+.article-content h2 {
+    font-size: 1.3rem;
+}
+
+.article-content h3 {
+    font-size: 1.1rem;
+}
+
+.article-content p {
+    margin: 0.75rem 0;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+    list-style: disc;
+}
+
+.article-content ol {
+    list-style: decimal;
+}
+
+.article-content li {
+    margin: 0.25rem 0;
+}
+
+.article-content a {
+    color: #9d00ff;
+    text-decoration: underline;
+}
+
+.article-content a:hover {
+    color: green;
+}
+
+.article-content hr {
+    border-top: 1px solid #242424;
+    margin: 1.5rem 0;
+}
+
+.article-content pre {
+    background-color: #161616;
+    border: 1px solid #242424;
+    padding: 0.75rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+    font-family: monospace;
+    font-size: 0.85rem;
+    white-space: pre;
+}
+
+.article-content code {
+    font-family: monospace;
+}
+
+.article-content p code,
+.article-content li code {
+    background-color: #161616;
+    border: 1px solid #242424;
+    padding: 0 0.25rem;
+}
+
+.article-content sup {
+    vertical-align: super;
+    font-size: 0.8em;
+}
+
+.article-content s {
+    text-decoration: line-through;
+}
+
+.article-content .ul {
+    text-decoration: underline;
+}
+
+.article-content strong {
+    font-weight: bold;
+}
+
+.article-content em {
+    font-style: italic;
 }
