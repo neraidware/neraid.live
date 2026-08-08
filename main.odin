@@ -303,9 +303,10 @@ render_norg :: proc(content: string) -> (html, title: string) {
                 first_h1 = false
                 if title == "" {
                     title = inner
+                    continue
                 }
-                continue
             }
+            level += 1
             if level > 6 {
                 level = 6
             }
