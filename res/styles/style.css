@@ -353,6 +353,7 @@ main.article {
 }
 
 .article-content li {
+    display: list-item;
     margin: 0.25rem 0;
 }
 
