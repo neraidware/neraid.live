@@ -14,22 +14,12 @@
             <h1 class="blog-title">blog</h1>
             <ul class="blog-list">
                 {{#entries}}
-                {{#is_micro}}
-                <li class="micro-post">
-                    <span class="blog-date">{{date}}</span>
-                    <div class="micro-content article-content">
-{{{content}}}
-                    </div>
-                </li>
-                {{/is_micro}}
-                {{^is_micro}}
                 <li>
                     <a href="{{url}}">
                         <span class="blog-date">{{date}}</span>
                         <span class="blog-entry-title">{{title}}</span>
                     </a>
                 </li>
-                {{/is_micro}}
                 {{/entries}}
             </ul>
         </main>

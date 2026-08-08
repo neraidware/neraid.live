@@ -26,7 +26,6 @@ Article :: struct {
     slug: string,
     url: string,
     title: string,
-    is_micro: bool,
     content: string,
 }
 
@@ -133,17 +132,6 @@ generate_blog :: proc() {
         }
         if title == "" {
             title = slug
-        }
-
-        if kind == "micro.norg" {
-            append(&articles, Article{
-                date = date,
-                slug = slug,
-                title = title,
-                is_micro = true,
-                content = html,
-            })
-            continue
         }
 
         out_dir := fmt.tprintf("deploy/blog/%s/%s", date, slug)
