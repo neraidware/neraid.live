@@ -320,32 +320,54 @@ main.article {
 .article-content h2,
 .article-content h3,
 .article-content h4,
-.article-content h5 {
+.article-content h5,
+.article-content h6 {
+    display: block;
     margin: 1.25rem 0 0.5rem;
-    color: #9d00ff;
+    font-weight: bold;
 }
 
 .article-content h1 {
+    color: #ff5252;
     font-size: 1.6rem;
 }
 
 .article-content h2 {
+    color: #ffa726;
     font-size: 1.3rem;
 }
 
 .article-content h3 {
+    color: #ffd54f;
     font-size: 1.1rem;
 }
 
+.article-content h4 {
+    color: #66bb6a;
+    font-size: 1.05rem;
+}
+
+.article-content h5 {
+    color: #4fc3f7;
+    font-size: 1rem;
+}
+
+.article-content h6 {
+    color: #42a5f5;
+    font-size: 0.95rem;
+}
+
 .article-content p {
+    display: block;
     margin: 0.75rem 0;
 }
 
 .article-content ul,
 .article-content ol {
+    display: block;
     margin: 0.75rem 0;
     padding-left: 1.5rem;
-    list-style: disc;
+    list-style: square;
 }
 
 .article-content ol {
@@ -359,38 +381,110 @@ main.article {
 
 .article-content a {
     color: #9d00ff;
-    text-decoration: underline;
+    cursor: pointer;
+    transition: none;
 }
 
 .article-content a:hover {
-    color: green;
+    background: linear-gradient(0deg, #ff5252, #9d00ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
 }
 
 .article-content hr {
+    display: block;
     border-top: 1px solid #242424;
     margin: 1.5rem 0;
 }
 
-.article-content pre {
-    background-color: #161616;
-    border: 1px solid #242424;
-    padding: 0.75rem;
+.article-content .codeblock {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    background-color: #0b0b0b;
+    border: 2px solid #1f1f1f;
+    border-radius: 0;
+    box-shadow: 0 0 14px rgba(157, 0, 255, 0.12);
+    overflow: hidden;
+}
+
+.article-content .code-text {
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    padding: 0.85rem 1rem;
     overflow-x: auto;
-    margin: 0.75rem 0;
-    font-family: monospace;
-    font-size: 0.85rem;
+    font-family: cubit, monospace;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    tab-size: 4;
     white-space: pre;
 }
 
+.article-content .code-text::-webkit-scrollbar {
+    height: 8px;
+}
+
+.article-content .code-text::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.article-content .code-text::-webkit-scrollbar-thumb {
+    background: #2e2e2e;
+    border-radius: 4px;
+}
+
+.article-content .code-text::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3a;
+}
+
+.article-content .code-text .tok-kw {
+    color: #c792ea;
+}
+
+.article-content .code-text .tok-type {
+    color: #82aaff;
+}
+
+.article-content .code-text .tok-str {
+    color: #c3e88d;
+}
+
+.article-content .code-text .tok-num {
+    color: #f78c6c;
+}
+
+.article-content .code-text .tok-cmt {
+    color: #6b7480;
+    font-style: italic;
+}
+
+.article-content .code-lang {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: #1d1d1d;
+    border-bottom: 2px solid #1f1f1f;
+    font-family: cubit, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9b9b9b;
+}
+
 .article-content code {
-    font-family: monospace;
+    font-family: cubit, monospace;
 }
 
 .article-content p code,
 .article-content li code {
     background-color: #161616;
     border: 1px solid #242424;
-    padding: 0 0.25rem;
+    border-radius: 4px;
+    padding: 0.05rem 0.3rem;
+    font-size: 0.85em;
 }
 
 .article-content sup {

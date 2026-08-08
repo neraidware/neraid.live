@@ -225,6 +225,7 @@ render_norg :: proc(content: string) -> (html, title: string) {
     in_code, in_ul, in_ol, in_p := false, false, false, false
     in_meta := false
     first_h1 := true
+    code_lang := ""
 
     lines := strings.split_lines(content, context.allocator)
     defer delete(lines)
@@ -254,20 +255,31 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
         if strings.has_prefix(trimmed, "@code") {
             close_blocks(&b, &pb, &in_code, &in_ul, &in_ol, &in_p)
+            lang := strings.trim_space(trimmed[5:])
             strings.write_string(&b, INDENT)
-            strings.write_string(&b, "<pre><code>")
+            strings.write_string(&b, "<div class=\"codeblock\">\n")
+            if len(lang) > 0 {
+                strings.write_string(&b, LI_INDENT)
+                strings.write_string(&b, "<div class=\"code-lang\">")
+                escape_into(&b, lang)
+                strings.write_string(&b, "</div>\n")
+            }
+            strings.write_string(&b, INDENT)
+            strings.write_string(&b, "<div class=\"code-text\">\n")
             in_code = true
+            code_lang = lang
             continue
         }
 
         if trimmed == "@end" {
-            strings.write_string(&b, "</code></pre>\n")
+            strings.write_string(&b, "</div>\n")
+            strings.write_string(&b, "</div>\n")
             in_code = false
             continue
         }
 
         if in_code {
-            escape_into(&b, line)
+            highlight_line(&b, line, code_lang)
             strings.write_byte(&b, '\n')
             continue
         }
@@ -347,7 +359,8 @@ render_norg :: proc(content: string) -> (html, title: string) {
 
 close_blocks :: proc(b, pb: ^strings.Builder, in_code, in_ul, in_ol, in_p: ^bool) {
     if in_code^ {
-        strings.write_string(b, "</code></pre>\n")
+        strings.write_string(b, "</div>\n")
+        strings.write_string(b, "</div>\n")
         in_code^ = false
     }
     if in_ul^ {
@@ -534,4 +547,131 @@ escape_into :: proc(b: ^strings.Builder, s: string) {
             strings.write_byte(b, c)
         }
     }
+}
+
+// ------------------------------------------------------------------
+// code highlighting
+// ------------------------------------------------------------------
+
+ODIN_KEYWORDS := "and,or,not,import,package,proc,struct,enum,union,distinct,if,else,for,in,switch,case,break,continue,defer,return,fallthrough,when,where,using,do,typeid,matrix,vector,bit_set,map,bit_field"
+ODIN_TYPES := "int,int8,int16,int32,int64,uint,uint8,uint16,uint32,uint64,uintptr,f32,f64,string,cstring,bool,byte,rune,any,rawptr,complex64,complex128,error,size_t,ptrdiff_t"
+
+highlight_line :: proc(b: ^strings.Builder, line: string, lang: string) {
+    i := 0
+    n := len(line)
+
+    for i < n {
+        c := line[i]
+
+        if lang == "odin" && c == '/' && i + 1 < n && line[i + 1] == '/' {
+            strings.write_string(b, "<span class=\"tok-cmt\">")
+            escape_into(b, line[i:])
+            strings.write_string(b, "</span>")
+            return
+        }
+
+        if lang == "odin" && c == '/' && i + 1 < n && line[i + 1] == '*' {
+            end := n
+            if j := strings.index(line[i:], "*/"); j != -1 {
+                end = i + j + 2
+            }
+            strings.write_string(b, "<span class=\"tok-cmt\">")
+            escape_into(b, line[i:end])
+            strings.write_string(b, "</span>")
+            i = end
+            continue
+        }
+
+        if c == '"' || c == '`' || (lang == "odin" && c == '\'') {
+            end := n
+            j := i + 1
+            for j < n {
+                if line[j] == '\\' && j + 1 < n {
+                    j += 2
+                    continue
+                }
+                if line[j] == c {
+                    end = j + 1
+                    break
+                }
+                j += 1
+            }
+            strings.write_string(b, "<span class=\"tok-str\">")
+            escape_into(b, line[i:end])
+            strings.write_string(b, "</span>")
+            i = end
+            continue
+        }
+
+        if c >= '0' && c <= '9' {
+            j := i
+            for j < n && is_num_cont(line[j]) {
+                j += 1
+            }
+            strings.write_string(b, "<span class=\"tok-num\">")
+            escape_into(b, line[i:j])
+            strings.write_string(b, "</span>")
+            i = j
+            continue
+        }
+
+        if is_ident_start(c) {
+            j := i
+            for j < n && is_ident_cont(line[j]) {
+                j += 1
+            }
+            word := line[i:j]
+            if lang == "odin" {
+                if in_word_list(word, ODIN_KEYWORDS) {
+                    strings.write_string(b, "<span class=\"tok-kw\">")
+                    escape_into(b, word)
+                    strings.write_string(b, "</span>")
+                } else if in_word_list(word, ODIN_TYPES) {
+                    strings.write_string(b, "<span class=\"tok-type\">")
+                    escape_into(b, word)
+                    strings.write_string(b, "</span>")
+                } else {
+                    escape_into(b, word)
+                }
+            } else {
+                escape_into(b, word)
+            }
+            i = j
+            continue
+        }
+
+        escape_into(b, line[i:i + 1])
+        i += 1
+    }
+}
+
+is_ident_start :: proc(c: byte) -> bool {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'
+}
+
+in_word_list :: proc(word, list: string) -> bool {
+    start := 0
+    for {
+        end := strings.index_byte(list[start:], ',')
+        token := list[start:] if end == -1 else list[start:start + end]
+        if token == word {
+            return true
+        }
+        if end == -1 {
+            return false
+        }
+        start += end + 1
+    }
+}
+
+is_ident_cont :: proc(c: byte) -> bool {
+    return is_ident_start(c) || (c >= '0' && c <= '9')
+}
+
+is_num_cont :: proc(c: byte) -> bool {
+    return (c >= '0' && c <= '9') ||
+        (c >= 'a' && c <= 'f') ||
+        (c >= 'A' && c <= 'F') ||
+        c == '_' || c == 'x' || c == 'X' || c == '.' ||
+        c == 'e' || c == 'E'
 }
