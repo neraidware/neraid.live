@@ -15,6 +15,7 @@ const twitch_embed = new Twitch.Embed("twitch_embed", {
     parent: ["neraid.live", "www.neraid.live", "localhost", "127.0.0.1"],
     autoplay: false,
     muted: true,
+    layout: "video",
     width: 560,
     height: 315,
 });
