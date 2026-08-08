@@ -147,6 +147,9 @@ main {
 
 .live-text > span {
     margin: 0;
+}
+
+.is-live .live-text > span {
     animation: text-float 1s infinite ease-in-out alternate;
     animation-delay: calc(var(--index) * 0.1s);
     transform: translateY(-10px);
@@ -219,11 +222,17 @@ aside * {
     aspect-ratio: 16/9;
     border-radius: 15px;
     overflow: hidden;
+    border: 0;
 }
 
 #twitch_embed iframe {
     width: 100%;
     height: 100%;
+    margin: 0;
+}
+
+#twitch-status {
+    display: block;
 }
 
 @media only screen and (max-width: 640px) {
