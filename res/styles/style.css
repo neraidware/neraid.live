@@ -211,8 +211,10 @@ aside * {
 }
 
 #latest_video_embed {
+    width: 100%;
     max-width: 20rem;
     aspect-ratio: 16/9;
+    height: auto;
     border-radius: 15px;
 }
 
