@@ -43,27 +43,9 @@ main :: proc() {
                 hand = "res/icons/pointing_hand.png",
             },
             {
-                title = "@neraidware",
-                icon_url = "res/icons/youtube.png",
-                url = "https://youtube.com/@neraidware",
-                hand = "res/icons/pointing_hand.png",
-            },
-            {
                 title = "neraid_live",
                 icon_url = "res/icons/twitch.png",
                 url = "https://twitch.tv/neraid_live",
-                hand = "res/icons/pointing_hand.png",
-            },
-            {
-                title = "@neraidware",
-                icon_url = "res/icons/github.png",
-                url = "https://github.com/neraidware",
-                hand = "res/icons/pointing_hand.png",
-            },
-            {
-                title = "@neraid",
-                icon_url = "res/icons/codeberg.png",
-                url = "https://codeberg.org/neraid",
                 hand = "res/icons/pointing_hand.png",
             },
             {
@@ -83,6 +65,12 @@ main :: proc() {
                 icon_url = "res/icons/x.png",
                 url = "https://x.com/neraid_live",
                 hand = "res/icons/middle_finger.png",
+            },
+            {
+                title = "contato@neraid.live",
+                icon_url = "res/icons/email.png",
+                url = "mailto:contato@neraid.live",
+                hand = "res/icons/pointing_hand.png",
             },
         }
     }
