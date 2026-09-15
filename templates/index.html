@@ -13,6 +13,30 @@
         <nav id="topbar">
             <a href="/blog">Blog</a>
         </nav>
+        <main>
+            <div id="socials">
+                <iframe src="https://discord.com/widget?id=1509680475134754866&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                {{#social}}
+                <div class="social-row">
+                    <div class="hand">
+                        <img src="{{hand}}" alt="">
+                    </div>
+                    <a class="social-button" target="_blank" href="{{url}}">
+                        <div class="social-icon"><img src="{{icon_url}}"></div>
+                        <span class="social-text">{{title}}</span>
+                    </a>
+                </div>
+                {{/social}}
+            </div>
+        </main>
+        <div id="interactive-gif">
+            <div class="hovered">
+                <img src="res/images/please_dont_hurt_me.png" alt="im innocent i swear">
+            </div>
+            <div class="unhovered">
+                <img src="res/images/me.gif" alt="grovata">
+            </div>
+        </div>
         <aside> 
             <span>
                 <span>O vídeo mais</span>
@@ -39,29 +63,5 @@
             </div>
             <div id="twitch_embed"></div>
         </aside>
-        <div id="interactive-gif">
-            <div class="hovered">
-                <img src="res/images/please_dont_hurt_me.png" alt="im innocent i swear">
-            </div>
-            <div class="unhovered">
-                <img src="res/images/me.gif" alt="grovata">
-            </div>
-        </div>
-        <main>
-            <div id="socials">
-                <iframe src="https://discord.com/widget?id=1509680475134754866&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-                {{#social}}
-                <div class="social-row">
-                    <div class="hand">
-                        <img src="{{hand}}" alt="">
-                    </div>
-                    <a class="social-button" target="_blank" href="{{url}}">
-                        <div class="social-icon"><img src="{{icon_url}}"></div>
-                        <span class="social-text">{{title}}</span>
-                    </a>
-                </div>
-                {{/social}}
-            </div>
-        </main>
     </body>
 </html>
