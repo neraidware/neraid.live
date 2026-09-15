@@ -49,15 +49,15 @@ main :: proc() {
                 hand = "res/icons/pointing_hand.png",
             },
             {
-                title = "@neraid.live",
+                title = "@neraid_live",
                 icon_url = "res/icons/instagram.png",
-                url = "https://instagram.com/neraid.live",
+                url = "https://instagram.com/neraid_live",
                 hand = "res/icons/pointing_hand.png",
             },
             {
-                title = "@neraid.live",
+                title = "@neraid_live",
                 icon_url = "res/icons/tiktok.png",
-                url = "https://tiktok.com/@neraid.live",
+                url = "https://tiktok.com/@neraid_live",
                 hand = "res/icons/pointing_hand.png",
             },
             {
